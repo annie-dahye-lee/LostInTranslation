@@ -42,7 +42,26 @@ public class LanguageCodeConverter {
             iterator.next(); // skip the first line
             while (iterator.hasNext()) {
                 String line = iterator.next();
-                // TODO Task A: use line to populate the instance variables
+                // Find the position of the last space or tab; this space separates the full names from the codes.
+
+                // Iterate line from right to left.
+                int pos_break = line.length() - 1;
+
+                for (; pos_break != -1; pos_break--) {
+
+                    // If the current position is a space or tab, this is the last instance of space or tab, so break the loop & record the value.
+                    if (line.charAt(pos_break) == ' ' || line.charAt(pos_break) == '\t') {
+                        break;
+                    }
+                }
+
+                // Get the trimmed substrings of the full names & codes with pos_break.
+                String lang = line.substring(0, pos_break).trim();
+                String code = line.substring(pos_break).trim();
+
+                // Populate languageCodeToLanguage & languageToLanguageCode with these.
+                this.languageCodeToLanguage.put(code, lang);
+                this.languageToLanguageCode.put(lang, code);
             }
 
         } catch (IOException | URISyntaxException ex) {
@@ -56,8 +75,7 @@ public class LanguageCodeConverter {
      * @return the name of the language corresponding to the code
      */
     public String fromLanguageCode(String code) {
-        // TODO Task A: update this code to use the correct instance variable to return the appropriate value
-        return code;
+        return this.languageCodeToLanguage.get(code);
     }
 
     /**
@@ -66,8 +84,7 @@ public class LanguageCodeConverter {
      * @return the 2-letter code of the language
      */
     public String fromLanguage(String language) {
-        // TODO Task A: update this code to use the correct instance variable to return the appropriate value
-        return language;
+        return this.languageToLanguageCode.get(language);
     }
 
     /**
